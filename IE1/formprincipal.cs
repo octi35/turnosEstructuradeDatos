@@ -28,7 +28,7 @@ namespace IE1
         // Evento que se ejecuta al presionar el botón Insertar
         private void btnInsertar_Click(object sender, EventArgs e)
         {
-            if (!validarCamposPaciente()) return; // Verifica que los campos estén completos
+            if (!validarCamposPaciente()) return; // para ver  que los campos estén completos
 
             if (cmbEspecialidad.SelectedItem == null)
             {
@@ -153,15 +153,20 @@ namespace IE1
         // Guarda el estado actual de las colas en archivos de texto
         public void backup()
         {
+            // 1. Obtener los registros actuales de la cola de Clínica en formato string
             List<string> listaClinica = esperaClinicaMedica.devolverRegistros();
+
+            // 2. Crear o sobrescribir el archivo backup_clinica.txt
             using (StreamWriter escribir = File.CreateText("backup_clinica.txt"))
             {
+                // 3. Escribir cada registro (paciente) en una línea del archivo
                 foreach (string registro in listaClinica)
                 {
                     escribir.WriteLine(registro);
                 }
             }
 
+            // 4. Repetir el proceso para la cola de Pediatría
             List<string> listaPediatria = esperaPediatria.devolverRegistros();
             using (StreamWriter escribir = File.CreateText("backup_pediatria.txt"))
             {
@@ -171,6 +176,7 @@ namespace IE1
                 }
             }
 
+            // 5. Repetir el proceso para la cola de Guardia
             List<string> listaGuardia = esperaGuardia.devolverRegistros();
             using (StreamWriter escribir = File.CreateText("backup_guardia.txt"))
             {
@@ -180,6 +186,7 @@ namespace IE1
                 }
             }
         }
+
 
         // Restaura las colas desde los archivos de texto si existen
         public void restaurar()
